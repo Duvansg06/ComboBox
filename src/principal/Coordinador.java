@@ -1,7 +1,9 @@
 package principal;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
+import conexion.Conexion;
 import dao.PersonaDao;
 import vo.PersonaVo;
 
@@ -32,8 +34,19 @@ public class Coordinador {
 				return persona;
 			}
 		}
-		System.out.println("no ecuientra la perssona");
+		System.out.println("no encuentra la persona");
 		return null;
 	}
+	
+
+	public boolean actualizarPersona(PersonaVo personaActualizada) {
+		
+		return miPersonaDao.actualizarPersona(personaActualizada);
+	}
+
+	public boolean eliminarPersona(PersonaVo personaEliminada) {
+		return miPersonaDao.eliminarPersona(personaEliminada);
+	}
+
 
 }

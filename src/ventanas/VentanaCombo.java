@@ -5,18 +5,21 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import dao.PersonaDao;
 import principal.Coordinador;
 import vo.PersonaVo;
 
@@ -158,40 +161,97 @@ public class VentanaCombo extends JFrame implements ActionListener {
 	                 lblSeleccion.setText(comboPersonas.getSelectedItem().toString());
    
 	                 Object seleccion = comboPersonas.getSelectedItem();
-//	                 String doc = seleccion.split("-")[0];
-//	                 System.out.print(doc + "aca estoyyyy");
+	                 List<PersonaVo> persona = miCoordinador.consultarListaPersonas();
 	                 
-//	                 PersonaVo persona = miCoordinador.consultarListaPersonasPorDocumento(doc);
 	                 if (comboPersonas.getSelectedIndex() > 0 && seleccion instanceof PersonaVo) {
-	                	 PersonaVo persona = (PersonaVo) seleccion;
-	                	 if(persona != null) {
-	                		 cargarPersona(persona);
+	                	 PersonaVo persona1 = (PersonaVo) seleccion;
+	                	 if(persona1 != null) {
+	                		 cargarPersona(persona1);
 	                	 }else {
-	                		 System.out.println("esta reecibinendo null");
+	                		 System.out.println("esta recibiendo null");
 	                	 }	                	 
 	                 }
 	 		}
-	         
-	           
+	
 	             }else {
 	                 lblSeleccion.setText("");
 	             }
 	         }
 	 	
 	 	if (e.getSource()==btnActualizar) {
-	 			
-	 		
-	 		
+	 			ActualizarRegistro();
+
 	 	}
-	 	
-	 	
+	
 	 	if(e.getSource()== btnEliminar) {
-	 		
-	 		
-	 		
+	 			EliminarPersona();
+	 			cargarRegistros();
 	 	}
+	 	
 	        
 	    }
+
+	private void EliminarPersona() {
+		
+		if(comboPersonas.getSelectedIndex() < 0 || comboPersonas.getSelectedItem() == null) {
+			JOptionPane.showMessageDialog(this, "Seleccione la persona a eliminar. ");
+			return;
+		}
+			
+			try {
+				PersonaVo personaObtenida = (PersonaVo) comboPersonas.getSelectedItem();
+
+				boolean eliminado = miCoordinador.eliminarPersona(personaObtenida);
+				
+				if(eliminado) {
+					JOptionPane.showMessageDialog(this, "Usuario eliminado con demasiado exito");
+				}else {
+					JOptionPane.showMessageDialog(this, "Usuario no eliminado");
+				}
+				
+			} catch (Exception e) {
+			    JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage());
+			}
+		}
+		
+	
+
+
+
+	private void ActualizarRegistro() {
+		
+		if (comboPersonas.getSelectedIndex() < 0 || comboPersonas.getSelectedItem() == null) {
+	        JOptionPane.showMessageDialog(this, "Debes seleccionar una persona del combo para actualizar.");
+	        return;
+	    }
+		
+		 try {
+		        PersonaVo personaSeleccionada = (PersonaVo) comboPersonas.getSelectedItem();
+
+		        PersonaVo personaActualizada = new PersonaVo();
+		        personaActualizada.setDocumento(personaSeleccionada.getDocumento()); 
+		        personaActualizada.setNombre(txtNombre.getText());
+		        personaActualizada.setDireccion(txtDireccion.getText());
+		        personaActualizada.setTelefono(txtTelefono.getText());
+
+		        boolean actualizado = miCoordinador.actualizarPersona(personaActualizada);
+
+		        if (actualizado) {
+		            JOptionPane.showMessageDialog(this, "Persona actualizada correctamente.");
+		            cargarRegistros();
+		        } else {
+		            JOptionPane.showMessageDialog(this, "No se pudo actualizar la persona.");
+		        }
+
+		    } catch (Exception e) {
+		        JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage());
+		    }
+		
+		
+	}
+	
+	
+
 
 	private void cargarPersona(PersonaVo persona) {
 		txtDoc.setText(persona.getDocumento());
@@ -249,13 +309,7 @@ public class VentanaCombo extends JFrame implements ActionListener {
 
 	private void llenarCombo(ArrayList<PersonaVo> listaPersonas) {
 		comboPersonas.removeAllItems();
-//        comboPersonas.addItem("Seleccione");
 
-//        String item = "";
-//        for (int i = 0; i < listaPersonas.size() ; i++) {
-//            item = listaPersonas.get(i).getDocumento()+" - " +listaPersonas.get(i).getNombre();
-//            comboPersonas.addItem(item);
-//        }	
         for (PersonaVo persona : listaPersonas) {
             comboPersonas.addItem(persona);
         }
