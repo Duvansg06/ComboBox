@@ -161,15 +161,11 @@ public class VentanaCombo extends JFrame implements ActionListener {
 	                 lblSeleccion.setText(comboPersonas.getSelectedItem().toString());
    
 	                 Object seleccion = comboPersonas.getSelectedItem();
-	                 List<PersonaVo> persona = miCoordinador.consultarListaPersonas();
-	                 
 	                 if (comboPersonas.getSelectedIndex() > 0 && seleccion instanceof PersonaVo) {
 	                	 PersonaVo persona1 = (PersonaVo) seleccion;
 	                	 if(persona1 != null) {
 	                		 cargarPersona(persona1);
-	                	 }else {
-	                		 System.out.println("esta recibiendo null");
-	                	 }	                	 
+	                	 }               	 
 	                 }
 	 		}
 	
