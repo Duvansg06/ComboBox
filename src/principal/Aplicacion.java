@@ -1,5 +1,7 @@
 package principal;
 
+import java.sql.Connection;
+
 import conexion.Conexion;
 
 public class Aplicacion {
@@ -8,7 +10,7 @@ public class Aplicacion {
 		Relaciones misRelaciones = new Relaciones();
 		misRelaciones.iniciar();
 		
-		Conexion miConexion = new Conexion();
+		Connection miConexion = Conexion.getInstancia().getConnection();
 	}
 
 }

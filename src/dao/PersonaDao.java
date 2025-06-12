@@ -16,7 +16,8 @@ public class PersonaDao {
 	
 	
 	public PersonaDao() {
-		conexion = Conexion.getConnection();
+		conexion = Conexion.getInstancia().getConnection();
+		
 		
 //		Conexion cone = new Conexion();
 //		PreparedStatement preStatement = null;
@@ -79,7 +80,7 @@ public class PersonaDao {
 	public boolean actualizarPersona(PersonaVo persona) {
 		
 		try {
-	        Connection con = Conexion.getConnection();
+			Connection con = Conexion.getInstancia().getConnection();
 	        String sql = "UPDATE persona SET nombre = ?, direccion = ?, telefono = ? WHERE documento = ?";
 	        java.sql.PreparedStatement ps = con.prepareStatement(sql);
 	        ps.setString(1, persona.getNombre());
@@ -100,7 +101,7 @@ public class PersonaDao {
 	public boolean eliminarPersona(PersonaVo personaEliminada) {
 		
 		try {
-			Connection conectar = Conexion.getConnection();
+			Connection conectar = Conexion.getInstancia().getConnection();
 			String sql = "DELETE FROM persona WHERE documento = ?";
 			java.sql.PreparedStatement ps = conectar.prepareStatement(sql);
 			
